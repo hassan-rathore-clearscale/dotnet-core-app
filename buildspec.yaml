@@ -1,10 +1,19 @@
 version: 0.2
 phases:
+  install:
+    runtime-versions:
+      dotnet: latest
+    commands:
+      - export PATH="$PATH:/root/.dotnet/tools"
+      - dotnet tool install -g AWS.CodeArtifact.NuGet.CredentialProvider
+      - dotnet codeartifact-creds install
+
   pre_build:
     commands:
       - echo Restore started on `date`
+      - dotnet nuget add source -n codeartifact $(aws codeartifact get-repository-endpoint --domain kcdomain --domain-owner 992536150469 --repository kc_dev_repo --format nuget --query repositoryEndpoint --output text)"v3/index.json"
       - dotnet restore src/dotnet-core-hello-world.csproj
   build:
     commands:
       - echo Build started on `date`
-      - dotnet publish -c release src/dotnet-core-hello-world.csproj
+      - dotnet publish --no-restore -c release dotnet-core-hello-world.csproj
