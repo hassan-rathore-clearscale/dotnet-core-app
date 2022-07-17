@@ -11,6 +11,8 @@ phases:
   pre_build:
     commands:
       - echo Restore started on `date`
+      - echo "**************************************"
+      - echo $CODEBUILD_BUILD_NUMBER
       - dotnet nuget add source -n codeartifact $(aws codeartifact get-repository-endpoint --domain kcdomain --domain-owner 992536150469 --repository kc_dev_repo --format nuget --query repositoryEndpoint --output text)"v3/index.json"
       - dotnet restore src/dotnet-core-hello-world.csproj
   build:
