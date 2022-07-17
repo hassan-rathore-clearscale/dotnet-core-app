@@ -19,3 +19,4 @@ phases:
     commands:
       - echo Build started on `date`
       - dotnet publish --no-restore -c release dotnet-core-hello-world.csproj
+
